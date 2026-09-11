@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/matthewcodergamer/LibertyRecomp.git",
+  "commit": "38a6dbcc33b5040524a32966a3c9ffcbcf5d5f72",
+  "note": "Pinned checkpoint: renderer and gameplay state before performance rewrite"
+}

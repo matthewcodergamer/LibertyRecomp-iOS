@@ -40,17 +40,23 @@ done
 
 [[ -f "${LOCK_FILE}" ]] || { echo "error: missing ${LOCK_FILE}" >&2; exit 2; }
 
-readarray -t LOCK_VALUES < <(python3 - "${LOCK_FILE}" <<'PY'
+# Keep this compatible with the Bash 3.2 that ships on many macOS/Xcode hosts;
+# readarray/mapfile were added in later Bash versions.
+UPSTREAM_REPO="$(python3 - "${LOCK_FILE}" <<'PY'
 import json, sys
 with open(sys.argv[1], "r", encoding="utf-8") as f:
-    data = json.load(f)
-print(data["repository"])
-print(data["commit"])
+    print(json.load(f)["repository"])
 PY
-)
+)"
+UPSTREAM_COMMIT="$(python3 - "${LOCK_FILE}" <<'PY'
+import json, sys
+with open(sys.argv[1], "r", encoding="utf-8") as f:
+    print(json.load(f)["commit"])
+PY
+)"
 
-UPSTREAM_REPO="${LOCK_VALUES[0]}"
-UPSTREAM_COMMIT="${LOCK_VALUES[1]}"
+[[ -n "${UPSTREAM_REPO}" ]] || { echo "error: upstream repository is empty in ${LOCK_FILE}" >&2; exit 2; }
+[[ "${UPSTREAM_COMMIT}" =~ ^[0-9a-fA-F]{40}$ ]] || { echo "error: upstream commit in ${LOCK_FILE} is not a 40-character Git SHA" >&2; exit 2; }
 
 mkdir -p "$(dirname "${DESTINATION}")"
 

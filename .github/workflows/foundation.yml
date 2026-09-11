@@ -1,0 +1,38 @@
+name: Foundation CI
+
+on:
+  push:
+    branches: [main, foundation-stages-0-5]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check prohibited private assets
+        run: python3 scripts/check-prohibited-assets.py
+      - name: Python unit tests
+        run: python3 -m unittest discover -s tests -p "test_*.py" -v
+      - name: Configure portable C++ foundation
+        run: cmake --preset host-debug
+      - name: Build portable C++ foundation
+        run: cmake --build --preset host-debug --parallel 2
+      - name: Run portable C++ tests
+        run: ctest --preset host-debug
+
+  upstream-pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch exact pinned upstream revision
+        run: ./scripts/fetch-upstream.sh --destination "$RUNNER_TEMP/LibertyRecomp"
+      - name: Verify pin and reference build files
+        run: ./scripts/ci-macos-reference.sh "$RUNNER_TEMP/LibertyRecomp"

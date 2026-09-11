@@ -1,0 +1,70 @@
+name: iOS platform bug
+description: Report Apple-platform lifecycle, storage, audio-session, controller, signing, or shell issues.
+title: "[iOS] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for native iOS platform behavior. Do not include certificates, provisioning profiles, private keys, or game files.
+  - type: input
+    id: commit
+    attributes:
+      label: LibertyRecomp-iOS commit
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: iPhone 11 / Apple A13
+    validations:
+      required: true
+  - type: input
+    id: ios
+    attributes:
+      label: iOS version
+      placeholder: iOS 16.x / 17.x / 18.x
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Platform area
+      options:
+        - App launch / lifecycle
+        - Background / foreground
+        - Files / storage
+        - Audio session
+        - Controller discovery
+        - Thermal / memory pressure
+        - Orientation / safe area
+        - Signing / installation
+        - Diagnostics / logging
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Redact identifiers and secrets before posting.
+      render: text

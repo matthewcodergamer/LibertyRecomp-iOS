@@ -1,0 +1,49 @@
+name: Apple Foundation Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  macos-foundation-reference:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Host architecture and Xcode version
+        run: |
+          uname -m
+          xcodebuild -version
+      - name: Configure macOS foundation reference
+        run: cmake --preset host-debug
+      - name: Compile macOS foundation reference
+        run: cmake --build --preset host-debug --parallel 2
+      - name: Run macOS foundation tests
+        run: ctest --preset host-debug
+
+  ios-arm64-shell:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode version
+        run: xcodebuild -version
+      - name: Configure unsigned iOS ARM64 shell
+        run: cmake --preset ios-ci
+      - name: Compile unsigned iOS ARM64 shell
+        run: cmake --build --preset ios-ci --parallel 2
+      - name: Confirm app bundle exists
+        run: |
+          APP="$(find out/build/ios-ci -type d -name 'Liberty Recompiled.app' -print -quit)"
+          test -n "$APP"
+          echo "Built: $APP"
+
+  upstream-reference-source:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned LibertyRecomp reference source
+        run: ./scripts/ci-macos-reference.sh "$RUNNER_TEMP/LibertyRecomp"

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "title": "Grand Theft Auto IV",
+  "platform": "Xbox 360",
+  "requiredFiles": [
+    {
+      "path": "default.xex",
+      "role": "executable"
+    },
+    {
+      "path": "common.rpf",
+      "role": "game-data"
+    },
+    {
+      "path": "xbox360.rpf",
+      "role": "game-data"
+    },
+    {
+      "path": "audio.rpf",
+      "role": "audio"
+    }
+  ],
+  "supportedRevisions": [],
+  "notes": [
+    "No executable hash is invented here.",
+    "Add a revision only after hashing the exact legally owned Xbox 360 executable used by the static recompilation configuration.",
+    "The shipping build should reject unknown executable revisions by default."
+  ]
+}

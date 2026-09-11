@@ -1,0 +1,38 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {"major": 3, "minor": 25, "patch": 0},
+  "configurePresets": [
+    {
+      "name": "host-debug",
+      "displayName": "Host Foundation Tests",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/host-debug",
+      "cacheVariables": {"CMAKE_BUILD_TYPE": "Debug", "LIBERTY_BUILD_TESTS": "ON"}
+    },
+    {
+      "name": "ios-base",
+      "hidden": true,
+      "generator": "Xcode",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "toolchainFile": "${sourceDir}/toolchains/ios.cmake",
+      "cacheVariables": {"LIBERTY_BUILD_TESTS": "OFF", "LIBERTY_IOS_SHELL_ONLY": "ON", "LIBERTY_IOS_CONTENT_MODE": "imported", "LIBERTY_IOS_GAMECENTER": "OFF", "LIBERTY_IOS_DIAGNOSTICS": "ON", "LIBERTY_IOS_ALLOW_UNPINNED_CONTENT": "OFF"}
+    },
+    {
+      "name": "ios-ci",
+      "displayName": "iOS ARM64 CI Shell",
+      "inherits": "ios-base",
+      "cacheVariables": {"CMAKE_OSX_SYSROOT": "iphoneos", "CMAKE_OSX_ARCHITECTURES": "arm64", "LIBERTY_IOS_BUNDLE_IDENTIFIER": "com.libertyrecomp.foundation.ci"}
+    },
+    {"name": "ios-device-debug", "displayName": "iOS ARM64 Device Debug", "inherits": "ios-base"},
+    {"name": "ios-device-release", "displayName": "iOS ARM64 Device Release", "inherits": "ios-base"}
+  ],
+  "buildPresets": [
+    {"name": "host-debug", "configurePreset": "host-debug"},
+    {"name": "ios-ci", "configurePreset": "ios-ci", "configuration": "Debug"},
+    {"name": "ios-device-debug", "configurePreset": "ios-device-debug", "configuration": "Debug"},
+    {"name": "ios-device-release", "configurePreset": "ios-device-release", "configuration": "Release"}
+  ],
+  "testPresets": [
+    {"name": "host-debug", "configurePreset": "host-debug", "output": {"outputOnFailure": true}}
+  ]
+}

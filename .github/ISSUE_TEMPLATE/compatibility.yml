@@ -1,0 +1,65 @@
+name: Compatibility bug
+description: Report a reproducible GTA IV gameplay, mission, world, save, or content compatibility failure.
+title: "[Compatibility] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe behavior without uploading Rockstar assets, saves containing proprietary payloads, executables, or archives.
+  - type: input
+    id: commit
+    attributes:
+      label: LibertyRecomp-iOS commit
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Supported game revision ID / executable SHA-256
+      description: Hashes/IDs are okay; do not upload the executable.
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Mission / area / gameplay system
+      placeholder: Opening mission, Broker street streaming, save/load, vehicle physics, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Give the shortest deterministic sequence from a known state.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Xbox 360 behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Progression blocker
+        - Major gameplay break
+        - Partial / intermittent
+        - Cosmetic / minor
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics / first known divergence
+      description: Guest PC, asset/resource ID, collision trace, renderer trace, save error, or other diagnostic evidence.
+      render: text

@@ -1,0 +1,69 @@
+# Build systems
+/build/
+/out/
+/cmake-build-*/
+CMakeUserPresets.json
+compile_commands.json
+
+# Apple/Xcode
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Signing/provisioning material
+*.mobileprovision
+*.p12
+*.pfx
+*.cer
+*.key
+*.pem
+*.der
+
+# Private GTA IV payloads / extracted media
+default.xex
+*.xex
+*.rpf
+*.iso
+*.xiso
+*.stfs
+*.live
+*.con
+aes_key.bin
+game/
+Game/
+Game.staging/
+Game.previous/
+local_game_payload/
+tools/local_game_payload/
+private_game/
+game_payload/
+
+# Upstream checkout/cache
+.cache/
+third_party/LibertyRecomp/
+vendor/LibertyRecomp/
+
+# Runtime caches
+Cache/
+Caches/
+shader-cache/
+pipeline-cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

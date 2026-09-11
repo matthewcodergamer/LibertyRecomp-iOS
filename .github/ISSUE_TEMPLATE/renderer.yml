@@ -1,0 +1,62 @@
+name: Renderer bug
+description: Report Metal/Xenos rendering, resource-conversion, shader, or presentation problems.
+title: "[Renderer] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Keep reports focused on the first rendering divergence. Do not attach copyrighted game payloads.
+  - type: input
+    id: commit
+    attributes:
+      label: LibertyRecomp-iOS commit
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device / macOS reference hardware
+      placeholder: iPhone 11 / Apple A13, or Mac model
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Rendering stage
+      options:
+        - Metal shell clear/present
+        - Resource upload/conversion
+        - Shader translation
+        - Pipeline state
+        - GTA draw submission
+        - Depth/stencil/blending
+        - Texture/sampler
+        - Post-processing/presentation
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Diagnostics
+      description: Metal validation output, debug labels, draw/resource IDs, pipeline keys, or relevant logs.
+      render: text

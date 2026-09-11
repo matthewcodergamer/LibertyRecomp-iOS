@@ -1,0 +1,58 @@
+name: CPU / runtime bug
+description: Report a static-recomp, PowerPC semantic, guest-memory, or runtime divergence.
+title: "[CPU/Runtime] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for low-level runtime failures. Do not attach Rockstar game files, `default.xex`, RPF archives, keys, or signing material.
+  - type: input
+    id: ios_commit
+    attributes:
+      label: LibertyRecomp-iOS commit
+      description: Exact commit SHA that reproduced the problem.
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+  - type: input
+    id: upstream_commit
+    attributes:
+      label: Pinned LibertyRecomp commit
+      placeholder: 40-character upstream commit SHA
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Game revision ID / executable SHA-256
+      description: Hashes/IDs are okay; do not upload the executable itself.
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Smallest deterministic sequence that triggers the failure.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Xbox 360 behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: First divergence and diagnostics
+      description: Include guest PC/LR, instruction, thread, memory address, assertion, or trace if available.
+      render: text
+  - type: textarea
+    id: regression
+    attributes:
+      label: Regression-test idea
+      description: If the root cause is known, describe the smallest test that should permanently cover it.

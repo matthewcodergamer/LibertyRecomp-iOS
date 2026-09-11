@@ -1,0 +1,61 @@
+name: Performance issue
+description: Report measurable CPU, GPU, memory, I/O, shader, or thermal regressions.
+title: "[Performance] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Performance reports need measurements. iPhone 11 / A13 is the baseline target; avoid conclusions from simulator timing.
+  - type: input
+    id: commit
+    attributes:
+      label: LibertyRecomp-iOS commit
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Physical device
+      placeholder: iPhone 11 / Apple A13
+    validations:
+      required: true
+  - type: input
+    id: ios
+    attributes:
+      label: iOS version
+    validations:
+      required: true
+  - type: input
+    id: scene
+    attributes:
+      label: Scene / workload
+      description: Area, mission, menu, driving route, or synthetic test.
+    validations:
+      required: true
+  - type: textarea
+    id: settings
+    attributes:
+      label: Graphics/runtime settings
+      description: Resolution scale, frame cap, quality settings, controller state, mods, and other relevant settings.
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Measurements
+      description: FPS/frame time, CPU time, GPU time, resident memory, streaming latency, shader stalls, thermal state, and duration where available.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: profile
+    attributes:
+      label: Profiling evidence
+      description: Summarize Instruments/Xcode GPU capture findings without uploading copyrighted game data.

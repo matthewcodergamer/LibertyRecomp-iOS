@@ -2,7 +2,7 @@ name: Apple Foundation Build
 
 on:
   push:
-    branches: [main, foundation-stages-0-5]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -10,6 +10,21 @@ permissions:
   contents: read
 
 jobs:
+  macos-foundation-reference:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Host architecture and Xcode version
+        run: |
+          uname -m
+          xcodebuild -version
+      - name: Configure macOS foundation reference
+        run: cmake --preset host-debug
+      - name: Compile macOS foundation reference
+        run: cmake --build --preset host-debug --parallel 2
+      - name: Run macOS foundation tests
+        run: ctest --preset host-debug
+
   ios-arm64-shell:
     runs-on: macos-14
     steps:
@@ -26,7 +41,7 @@ jobs:
           test -n "$APP"
           echo "Built: $APP"
 
-  macos-reference-source:
+  upstream-reference-source:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4

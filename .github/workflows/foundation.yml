@@ -2,7 +2,7 @@ name: Foundation CI
 
 on:
   push:
-    branches: [main, foundation-stages-0-5]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 

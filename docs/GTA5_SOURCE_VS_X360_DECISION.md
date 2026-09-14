@@ -78,6 +78,91 @@ For a real native IPA, compile source or statically recompiled C++ to ARM64 ahea
 | iPhone 11 optimization access | Best | Good, but guest/runtime semantics constrain changes |
 | Risk | middleware/platform dependencies | recompiler/runtime/render correctness |
 
+## Switch/Android port reuse strategy — work smarter, but reuse the right layer
+
+The unofficial Switch/Android work is valuable because it can eliminate discovery work, but it does **not** mean a compiled Switch or Android game can simply be renamed into an IPA.
+
+### Best case: source + rights are available
+
+If a Switch/Android port's source is legally usable, reuse the source-level work that is genuinely portable:
+
+- ARM64 fixes
+- pointer/alignment fixes
+- endianness assumptions already removed
+- reduced memory pools
+- lower-resolution render targets
+- mobile LOD/settings tables
+- asset-conversion recipes
+- shader simplifications
+- streaming/cache limits
+- controller/input abstraction changes
+- build-time feature disables
+
+Then replace only the platform-specific host:
+
+```text
+optimized ARM64 GTA V source
+        |
+        +-- Switch Horizon/libnx host   [replace]
+        +-- Android/Bionic host         [replace]
+        v
+iOS/Darwin host
+        +-- UIKit lifecycle
+        +-- Mach-O / Apple Clang
+        +-- Metal
+        +-- AVAudioSession
+        +-- GameController
+        +-- iOS Files/storage paths
+        v
+iPhone 11
+```
+
+This is the shortest legitimate source-level route because the expensive ARM/mobile optimization work can be preserved while only the OS/GPU integration is retargeted.
+
+### If only a compiled Switch build exists
+
+A Nintendo Switch `.nro`/`.nso` is ARM64, but it targets Horizon OS, Nintendo/libnx APIs, a different executable format/ABI environment, and Switch graphics/audio/input services. iOS expects Mach-O binaries, Darwin system libraries, Apple lifecycle APIs, and Metal.
+
+Therefore a compiled Switch binary is **not** a drop-in iOS binary. A loader/compatibility layer would become its own binary-translation/OS-emulation project and is not our preferred fastest path.
+
+### If only a compiled Android build exists
+
+An Android ARM64 `.so`/APK is also not directly linkable into an iOS app. Android uses ELF, Bionic/Linux APIs, Android lifecycle/JNI and typically GLES/Vulkan-facing platform code; iOS uses Mach-O, Darwin/UIKit and Metal.
+
+Again, source-level reuse is much better than binary wrapping.
+
+### Assets: reuse the recipe, not redistributed game data
+
+Do not place Rockstar assets, another project's compressed game pack, or leaked/proprietary build products in the public GitHub repository.
+
+Instead reproduce the mobile asset transformation against the user's own legally obtained game files:
+
+```text
+owned GTA V data
+ -> asset audit
+ -> per-class mobile conversion manifest
+ -> texture resize/recompression where safe
+ -> LOD/mobile settings generation
+ -> audio/video policy
+ -> validation hashes
+ -> local/private output
+```
+
+The public repo can contain conversion code, manifests, tests, expected metadata, and documentation without containing the transformed copyrighted game data itself.
+
+### Practical priority order
+
+1. Obtain/identify a legally reusable source-level Switch or Android port, if one exists.
+2. Diff its ARM/mobile changes against the original lawful GTA V source tree.
+3. Extract only portable engine/optimization changes into a private source workspace.
+4. Reproduce its asset optimization as scripts/manifests against owned GTA V files.
+5. Replace Horizon/Android platform code with iOS/Darwin.
+6. Implement/directly use Metal rather than carrying a Switch/Android graphics compatibility layer into the shipping build.
+7. Compile ARM64 ahead of time and package as a native Mach-O iOS app.
+8. Profile on iPhone 11 and continue optimization from measured bottlenecks.
+
+This is the preferred shortcut if lawful source-level reuse is available.
+
 ## Recommended program
 
 ### If lawful source is available
@@ -123,18 +208,21 @@ Raw CPU/GPU capability is not the only variable. The Mac can run an existing x86
 
 - SanRecomp publicly targets GTA V Xbox 360 static recompilation with XenonRecomp and has Apple/Metal paths in its build/runtime.
 - Current public reporting on the unofficial native Switch GTA V port shows ARM-native execution is feasible on 4 GB-class hardware, but that project is reported to rely on leaked Rockstar source and therefore is not a code source for this project.
+- Public reporting in September 2026 says the same developer is working on an Android build, but this does not establish a public, legally reusable source repository.
 - The useful lesson from that work is architectural: native ARM compilation plus aggressive memory/content/graphics tuning can outperform compatibility-layer approaches.
 
 ## Immediate next engineering step
 
-Do not build two full implementations at once. First determine the legal/technical status of the available source tree:
+Do not build two full implementations at once. First determine what reusable source-level material actually exists and can legally be used:
 
-- exact branch/version
+- exact Switch/Android project and revision
+- whether source is public or private
+- license/rights status
 - complete or partial
-- desktop buildability
-- renderer APIs present
+- asset pipeline scripts versus redistributed assets
+- ARM64/mobile patches
+- renderer API/backend
 - platform abstraction layout
 - middleware dependencies
-- whether its license/rights permit modification and use
 
-If it is lawfully usable and complete, source-port architecture becomes GTA V Track A. SanRecomp remains Track B and a valuable behavioral/reference implementation. If not, Track B becomes primary.
+If lawful source-level Switch/Android work exists, use it as a shortcut and retarget the platform layer to iOS. If only compiled binaries exist, do not make binary wrapping the primary route; fall back to the lawful GTA V source-port path or SanRecomp clean-room path.

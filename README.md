@@ -37,6 +37,15 @@ The compatibility manifest intentionally has **no invented GTA IV hash**. Until 
 - Final artifact: signed `.ipa`
 - Game data: imported separately from a legally owned Xbox 360 copy
 
+## Native GTA IV + GTA V program plan
+
+The project now has a program-level architecture for taking both Xbox 360 titles to native iOS without making runtime emulation/JIT the shipping design:
+
+- [`docs/NATIVE_IOS_PROGRAM_PLAN.md`](docs/NATIVE_IOS_PROGRAM_PLAN.md) — GTA IV and GTA V zero-to-playable architecture, Git workflow, static recompilation strategy, Metal path, content/import model, physical-device gates, and IPA release flow.
+- [`docs/IPHONE11_BASELINE.md`](docs/IPHONE11_BASELINE.md) — A13 frame-time, rendering, memory, streaming, GPU, and thermal policy.
+
+GTA IV remains the first production target in this repository. GTA V should use a separate future `SanRecomp-iOS` project pinned to the public Xbox 360 static-recomp work, while reusing only Apple-platform components that have been proven reusable here. Leaked GTA V source or redistributed unofficial mobile payloads are not an acceptable implementation base.
+
 ## What is never committed
 
 This repository contains code, tooling, tests, documentation, and build infrastructure only. Do not commit `default.xex`, RPF archives, Xbox disc/ISO/STFS payloads, Rockstar assets, locally generated proprietary game payloads, signing certificates/private keys, or provisioning profiles. CI enforces the obvious cases.
